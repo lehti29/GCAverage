@@ -9,7 +9,7 @@
     "content_scripts": [
         {
           "matches": ["https://www.connect.garmin.com/*"],
-          "js": ["content.js", "helpers.js"]
+          "js": ["content.js"]
         }
       ],
     "permissions": ["storage", "activeTab", "scripting"],

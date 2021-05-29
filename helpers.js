@@ -16,12 +16,6 @@ var helpers = (function () {
         const minutes = Math.floor(avgSeconds / 60);
         return minutes.toString() + ':' + seconds.toString();
     }
-    // var getRandomArbitrary = function(min, max) {
-    //   return Math.floor(Math.random() * (max - min)) + min;
-    // }
-    // return {
-    //   getRandomArbitrary: getRandomArbitrary
-    // }
     return {
         toSeconds: toSeconds,
         toMinutes: toMinutes
