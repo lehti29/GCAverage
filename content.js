@@ -7,28 +7,10 @@ document.getElementById('calc').addEventListener("click", async () => {
   });
 });
 
-
-// function toSeconds(duration) {
-//   var t = duration.split(':');
-//   var sec;
-//   if (t.length === 3) { //hh:mm:s
-//     t = t.map(x => parseInt(x, 10));
-//     sec = (t[0] * 60 * 60) + (t[1] * 60) + t2;
-//   } else if (t.length === 2) { //mm:s
-//     t = t.map(x => parseInt(x, 10));
-//     sec = t[0] * 60 + t[1];
-//   }
-// }
-
-// function toMinutes(avgSeconds) {
-//   const seconds = avgSeconds % 60;
-//   const minutes = Math.floor(avgSeconds / 60);
-//   return minutes.toString() + ':' + seconds.toString();
-// }
-
 function calcAverage() {
   var rows = document.querySelectorAll('#intervals-table .active');
   var footer = document.querySelector('#intervals-table table tfoot');
+  var table = document.querySelector('#intervals-table table');
   var f = footer.cloneNode(true);
   var total = [];
   var tutti = 0;
@@ -48,12 +30,20 @@ function calcAverage() {
       total[4] += sec;
       tutti = tutti + sec;
     }
-    console.log(tutti);
   });
   avgSeconds = tutti / rows.length;
 
   const seconds = avgSeconds % 60;
   const minutes = Math.floor(avgSeconds / 60);
-  var avgPace = minutes.toString() + ':' + seconds.toString();
-  console.log('Average Pace is: ' + avgPace);
+  var avgPace = minutes.toString() + ':' + seconds.toFixed(1);
+  
+  if (document.querySelectorAll('#intervals-table table tfoot').length <= 1) {
+    table.appendChild(f);
+    var tr = f.firstChild;
+    for (var i = 0; i < tr.children.length; i++) {
+      tr.children[i].innerHTML = "";
+    }
+    tr.children[0].innerHTML = "Average";
+    tr.children[4].innerHTML = avgPace;
+  }
 }
