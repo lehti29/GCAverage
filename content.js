@@ -65,6 +65,6 @@ function calcAverage() {
     if (isNaN(seconds) || isNaN(minutes)) {
       return '';
     }
-    return minutes.toString() + ':' + seconds.toFixed(1).padStart(2, '0');
+    return minutes.toString() + ':' + seconds.toFixed(1).padStart(4, '0');
   }
 }
