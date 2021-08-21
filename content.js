@@ -9,40 +9,31 @@ document.getElementById('calc').addEventListener("click", async () => {
 
 function calcAverage() {
   var rows = document.querySelectorAll('#intervals-table .active');
-  var table = document.querySelector('#intervals-table table');
   var total = new Array(10);
-  total[1] = total[3] = total[4] = 0;
+  var indexes = [1, 4];
   rows.forEach(row => {
-    for (let i = 0; i < row.children.length; i++) {
-      if (i == 4) {
-        var p = row.children[i].innerHTML.trim();
-        var timeSplit = p.split(':');
-        var sec = getSec(timeSplit);
-        total[i] += sec;
-      } else if (i == 1) {
-        var p = row.children[i].innerHTML.trim();
-        var timeSplit = p.split(':');
-        var sec = getSec(timeSplit);
-        total[i] += sec;
-      }
-    }
+    indexes.forEach(i => {
+      if (!total[i]) total[i] = 0;
+      var timeSplit = row.children[i].innerHTML.trim().split(':');
+      total[i] += getSec(timeSplit);
+    });
   });
-  var avg1 = toTime(total[1], rows.length);
-  var avg4 = toTime(total[4], rows.length);
-  
+
   if (document.querySelectorAll('#intervals-table table tfoot').length <= 1) {
     var avgFooter = document.querySelector('#intervals-table table tfoot').cloneNode(true);
-    table.appendChild(avgFooter);
+    document.querySelector('#intervals-table table').appendChild(avgFooter);
     var tr = avgFooter.firstChild;
     for (var i = 0; i < tr.children.length; i++) {
       tr.children[i].innerHTML = "";
     }
-    tr.children[0].innerHTML = "Average";
-    tr.children[1].innerHTML = avg1;
-    tr.children[4].innerHTML = avg4;
+    indexes.forEach(i => {
+      tr.children[i].innerHTML = "";
+      tr.children[i].innerHTML = toTime(total[i], rows.length)
+    });
+    tr.children[0].innerHTML = `Average (of ${rows.length})`;
   }
 
-  function getSec(t){
+  function getSec(t) {
     if (t.length === 3) { //hh:mm:s
       t = t.map(x => parseFloat(x, 10));
       sec = (t[0] * 60 * 60) + (t[1] * 60) + t2;
