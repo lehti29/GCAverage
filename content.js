@@ -8,27 +8,41 @@ document.getElementById('calc').addEventListener("click", async () => {
 });
 
 function calcAverage() {
-  var rows = document.querySelectorAll('#intervals-table .active');
-  var total = new Array(10);
-  var indexes = [1, 4];
-  rows.forEach(row => {
-    indexes.forEach(i => {
-      if (!total[i]) total[i] = 0;
-      var timeSplit = row.children[i].innerHTML.trim().split(':');
-      total[i] += getSec(timeSplit);
-    });
-  });
+  calc();
+  console.log(document.getElementById('intervals-table'));
+  document.getElementById('intervals-table').addEventListener('click', () => {
+    setTimeout(() => {
+      calc();
+    }, 100); // Small delat to allow .active class to be added
+  })
 
-  if (document.querySelectorAll('#intervals-table table tfoot').length <= 1) {
-    var avgFooter = document.querySelector('#intervals-table table tfoot').cloneNode(true);
-    document.querySelector('#intervals-table table').appendChild(avgFooter);
+  function calc() {
+    var rows = document.querySelectorAll('#intervals-table .active');
+    var total = new Array(10);
+    var indexes = [1, 4];
+    rows.forEach(row => {
+      indexes.forEach(i => {
+        if (!total[i]) total[i] = 0;
+        var timeSplit = row.children[i].innerHTML.trim().split(':');
+        total[i] += getSec(timeSplit);
+      });
+    });
+
+    var avgFooter = document.getElementById('avgFooter');
+
+    if (!avgFooter) {
+      avgFooter = document.querySelector('#intervals-table table tfoot').cloneNode(true);
+      avgFooter.setAttribute('id', 'avgFooter');
+      document.querySelector('#intervals-table table').appendChild(avgFooter);
+    }
+
     var tr = avgFooter.firstChild;
     for (var i = 0; i < tr.children.length; i++) {
-      tr.children[i].innerHTML = "";
+      tr.children[i].innerHTML = '';
     }
     indexes.forEach(i => {
-      tr.children[i].innerHTML = "";
-      tr.children[i].innerHTML = toTime(total[i], rows.length)
+      tr.children[i].innerHTML = '';
+      tr.children[i].innerHTML = toTime(total[i], rows.length) || '';
     });
     tr.children[0].innerHTML = `Average (of ${rows.length})`;
   }
@@ -48,6 +62,9 @@ function calcAverage() {
     avgSeconds = tutti / amount;
     const seconds = avgSeconds % 60;
     const minutes = Math.floor(avgSeconds / 60);
-    return minutes.toString() + ':' + seconds.toFixed(1);
+    if (isNaN(seconds) || isNaN(minutes)) {
+      return '';
+    }
+    return minutes.toString() + ':' + seconds.toFixed(1).padStart(2, '0');
   }
 }
