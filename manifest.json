@@ -8,7 +8,7 @@
     },
     "content_scripts": [
         {
-          "matches": ["https://www.connect.garmin.com/*"],
+          "matches": ["https://www.connect.garmin.com/modern/activity*"],
           "js": ["content.js"]
         }
       ],

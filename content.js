@@ -9,23 +9,28 @@ document.getElementById('calc').addEventListener("click", async () => {
 
 function calcAverage() {
   calc();
-  console.log(document.getElementById('intervals-table'));
   document.getElementById('intervals-table').addEventListener('click', () => {
     setTimeout(() => {
       calc();
-    }, 100); // Small delat to allow .active class to be added
+    }, 100); // Small delay to allow .active class to be added
   })
 
   function calc() {
     var rows = document.querySelectorAll('#intervals-table .active');
     var total = new Array(10);
-    var indexes = [1, 4];
+    var timeIndexes = [1, 4, 12, 14, 15];
+    var numberIndexes = [3, 5, 6, 7, 8, 9, 10, 11, 13];
     rows.forEach(row => {
-      indexes.forEach(i => {
+      for (var i = 0; i < 16; i++) {
         if (!total[i]) total[i] = 0;
-        var timeSplit = row.children[i].innerHTML.trim().split(':');
-        total[i] += getSec(timeSplit);
-      });
+        let cellValue = row.children[i].innerHTML.trim();
+        if (cellValue.indexOf(':') > -1) { // Time with colon
+          var timeSplit = cellValue.split(':');
+          total[i] += getSec(timeSplit);
+        } else {
+          total[i] += parseFloat(cellValue, 10);
+        }
+      }
     });
 
     var avgFooter = document.getElementById('avgFooter');
@@ -33,18 +38,25 @@ function calcAverage() {
     if (!avgFooter) {
       avgFooter = document.querySelector('#intervals-table table tfoot').cloneNode(true);
       avgFooter.setAttribute('id', 'avgFooter');
+      avgFooter.style.backgroundColor = '#d6ff32';
       document.querySelector('#intervals-table table').appendChild(avgFooter);
     }
 
     var tr = avgFooter.firstChild;
-    for (var i = 0; i < tr.children.length; i++) {
-      tr.children[i].innerHTML = '';
-    }
-    indexes.forEach(i => {
+
+    timeIndexes.forEach(i => {
       tr.children[i].innerHTML = '';
       tr.children[i].innerHTML = toTime(total[i], rows.length) || '';
-    });
+    })
+
+    numberIndexes.forEach(i => {
+      tr.children[i].innerHTML = '';
+      // Since toString() removes trailing zeros
+      var val = parseFloat((total[i] / rows.length).toFixed(2)).toString();
+      tr.children[i].innerHTML = isNaN(val) ? '' : val;
+    })
     tr.children[0].innerHTML = `Average (of ${rows.length})`;
+    tr.children[2].innerHTML = '';
   }
 
   function getSec(t) {
