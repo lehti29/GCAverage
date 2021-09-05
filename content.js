@@ -17,7 +17,7 @@ function calcAverage() {
 
   function calc() {
     var rows = document.querySelectorAll('#intervals-table .active');
-    var total = new Array(10);
+    var total = new Array(16);
     var timeIndexes = [1, 4, 12, 14, 15];
     var numberIndexes = [3, 5, 6, 7, 8, 9, 10, 11, 13];
     rows.forEach(row => {
@@ -32,7 +32,7 @@ function calcAverage() {
         }
       }
     });
-
+    
     var avgFooter = document.getElementById('avgFooter');
 
     if (!avgFooter) {
@@ -46,7 +46,14 @@ function calcAverage() {
 
     timeIndexes.forEach(i => {
       tr.children[i].innerHTML = '';
-      tr.children[i].innerHTML = toTime(total[i], rows.length) || '';
+      if (i == 4) {
+        var factor, normTime;
+        factor = 1 / total[3];
+        normTime = factor * total[1];
+        tr.children[4].innerHTML = toTime(normTime, 1);
+      } else {
+        tr.children[i].innerHTML = toTime(total[i], 1) || '';
+      }
     })
 
     numberIndexes.forEach(i => {
@@ -55,6 +62,7 @@ function calcAverage() {
       var val = parseFloat((total[i] / rows.length).toFixed(2)).toString();
       tr.children[i].innerHTML = isNaN(val) ? '' : val;
     })
+
     tr.children[0].innerHTML = `Average (of ${rows.length})`;
     tr.children[2].innerHTML = '';
   }
