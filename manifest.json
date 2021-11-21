@@ -1,7 +1,7 @@
 {
-    "name": "GCAverage",
-    "description": "Calculates average pace from the active laps",
-    "version": "1.0",
+    "name": "Garmin Connect Lap Averages",
+    "description": "Calculates average values from the active laps",
+    "version": "0.0.0.1",
     "manifest_version": 3,
     "background": {
       "service_worker": "background.js"
