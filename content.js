@@ -50,9 +50,9 @@ function calcAverage() {
         var factor, normTime;
         factor = 1 / total[3];
         normTime = factor * total[1];
-        tr.children[4].innerHTML = toTime(normTime, 1);
+        tr.children[i].innerHTML = toTime(normTime, 1);
       } else {
-        tr.children[i].innerHTML = toTime(total[i], 1) || '';
+        tr.children[i].innerHTML = toTime(total[i], rows.length) || '';
       }
     })
 
